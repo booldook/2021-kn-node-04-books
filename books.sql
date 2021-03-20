@@ -11,6 +11,9 @@
 -- Delete
 -- DELETE FROM books WHERE id=3;
 
+-- Read
+-- SELECT * FROM books ORDER BY bookName ASC; -- ASC 
+
 
 
 
