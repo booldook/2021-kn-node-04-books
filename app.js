@@ -13,7 +13,7 @@ app.locals.pretty = true
 
 
 /************* Router ***************/
-const bookRouter = require('./routes/book')
+const bookRouter = require('./routes/book-router')
 app.use('/', express.static( path.join(__dirname, './public') ))
 app.use('/book', bookRouter)
 

@@ -1,0 +1,8 @@
+extends ../layout/default
+block content 
+	.container.py-3
+		form(action="/book/save", method="get")
+			input.form-control(type="text" name="bookName" placeholder="도서명")
+			input.form-control(type="text" name="writer" placeholder="저자")
+			input.form-control(type="text" name="content" placeholder="도서내용")
+			button.btn.btn-primary 저장

@@ -16,8 +16,12 @@ router.get('/', (req, res, next) => {
 })
 
 router.get('/create', (req, res, next) => {
+	res.render('book/create')
+})
+
+router.get('/save', (req, res, next) => {
 	let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
-	let values = ['춘향전', '변사또', '이몽룡이 나를...']
+	let values = [req.query.bookName, req.query.writer, req.query.content]
 	connection.query(sql, values, (err, result) => {
 		res.redirect('/book')
 	})
