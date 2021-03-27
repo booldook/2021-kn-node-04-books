@@ -2,8 +2,14 @@ nav.pager-wrapper.mb-5
 	ul.pagination.justify-content-center
 		li.page-item
 			a.page-link(href='#')
+				span(aria-hidden='true') 처음
+		li.page-item
+			a.page-link(href='#')
 				span(aria-hidden='true') &laquo;
 		li.page-item
+			a.page-link(href='#')
+				span(aria-hidden='true') &lt;
+		li.page-item.active
 			a.page-link(href='#') 1
 		li.page-item
 			a.page-link(href='#') 2
@@ -11,4 +17,10 @@ nav.pager-wrapper.mb-5
 			a.page-link(href='#') 3
 		li.page-item
 			a.page-link(href='#')
+				span(aria-hidden='true') &gt;
+		li.page-item
+			a.page-link(href='#')
 				span(aria-hidden='true') &raquo;
+		li.page-item
+			a.page-link(href='#')
+				span(aria-hidden='true') 마지막

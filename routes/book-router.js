@@ -17,17 +17,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		sql = 'SELECT * FROM books ORDER BY id DESC LIMIT ?, ?'
 		const [rs] = await connect.query(sql, [startRec, listCnt])
 		connect.release()
-		res.json(rs);
-		
-		/*
-		sql = 'SELECT * FROM books ORDER BY id DESC'
-		connect.release()
-		const books = result.map(v => {
+		const books = rs.map(v => {
 			v.createdAt = moment(v.createdAt).format('YYYY-MM-DD')
 			return v;
 		})
 		res.render('book/list', { ...pug, books })
-		*/
 	}
 	catch(err) {
 		next(err)
