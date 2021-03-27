@@ -20,8 +20,12 @@ nav.pager-wrapper.mb-5
 				a.page-link(href='#')
 					span &lt;
 		- for(var i=pager.startIdx; i<=pager.endIdx; i++)
-			li.page-item.active
-				a.page-link(href=`/book/list/${i}`)= i
+			if pager.page == i
+				li.page-item.active
+					a.page-link(href=`/book/list/${i}`)= i
+			else 
+				li.page-item
+					a.page-link(href=`/book/list/${i}`)= i
 		if pager.nextPage
 			li.page-item
 				a.page-link(href=`/book/list/${pager.nextPage}`)

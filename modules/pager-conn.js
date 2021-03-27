@@ -3,6 +3,7 @@
 const pager = (page, totalRec, obj={}) => {
 	page = Number(page)
 	totalRec = Number(totalRec)
+	obj.page = page
 	obj.listCnt = obj.listCnt || 3
 	obj.pageCnt = obj.pageCnt || 3
 	obj.totalRec = totalRec
