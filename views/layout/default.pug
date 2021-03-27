@@ -9,5 +9,8 @@ html(lang="ko")
 		link(rel="stylesheet", href=`/css/${file}.css`)
 		script(src="/js/jquery-3.6.0.min.js") 
 	body
-		block content
+		include ../inc/header
+		h1.p-5.text-center= title
+		.container
+			block content
 		script(src=`/js/${file}.js`)  

@@ -1,25 +1,33 @@
 const express = require('express')
+const moment = require('moment')
 const router = express.Router()
 const { pool } = require('../modules/mysql-conn')
+const pug = { title: '도서관리', file: 'book' }
 
 router.get('/', async (req, res, next) => {
 	let sql = 'SELECT * FROM books ORDER BY id DESC'
 	const connect = await pool.getConnection()
 	const result = await connect.query(sql)
 	connect.release()
-	res.json(result[0])
+	const books = result[0].map(v => {
+		v.createdAt = moment(v.createdAt).format('YYYY-MM-DD')
+		return v;
+	})
+	res.render('book/list', { ...pug, books })
 })
 
 router.get('/create', (req, res, next) => {
-	res.render('book/create')
+	res.render('book/create', pug)
 })
 
-router.get('/save', (req, res, next) => {
+router.post('/save', async (req, res, next) => {
+	let { bookName, writer, content } = req.body
 	let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
-	let values = [req.query.bookName, req.query.writer, req.query.content]
-	connection.query(sql, values, (err, result) => {
-		res.redirect('/book')
-	})
+	let values = [bookName, writer, content]
+	const connect = await pool.getConnection()
+	const result = connect.query(sql, values)
+	connect.release()
+	res.redirect('/book')
 })
 
 module.exports = router

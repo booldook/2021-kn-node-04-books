@@ -1,0 +1,22 @@
+extends ../layout/default
+block content
+	table.table.table-hover 
+		thead 
+			tr 
+				th 번호
+				th 도서명
+				th 내용
+				th 저자
+				th 발행일
+				th 관리
+		tbody 
+			each book in books
+				tr 
+					td= book.id
+					td= book.bookName
+					td= book.content
+					td= book.writer
+					td= book.createdAt
+					td
+						a(href=`/book/update/${book.id}`) 수정
+						a(href=`javascript: del(${book.id});`) 삭제

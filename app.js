@@ -11,8 +11,12 @@ app.listen(process.env.PORT, () => {
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, './views'))
 app.locals.pretty = true
+app.locals.TITLE = '도서관리시스템'
+
 
 /************* Middleware ***************/
+app.use(express.json())	// post -> req.body
+app.use(express.urlencoded({ extended: false }))
 
 
 /************* Router ***************/
