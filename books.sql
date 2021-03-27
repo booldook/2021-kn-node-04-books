@@ -13,6 +13,7 @@
 
 -- Read
 -- SELECT * FROM books ORDER BY bookName ASC; -- ASC 
+SELECT * FROM books ORDER BY id DESC LIMIT 0, 5; --시작레코드, 갯수
 
 
 
