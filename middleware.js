@@ -37,7 +37,7 @@ app.get('/1', (req, res, next) => {
 })
 
 app.get('/2', mw2, mw3('book'), (req, res, next) => {
-	mw4(req, res, next)
+	// mw4(req, res, next)
 	res.json({
 		mw1: req.msg,
 		mw2: req.msg2,
