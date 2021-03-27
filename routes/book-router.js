@@ -32,7 +32,21 @@ router.post('/save', joi('book'), async (req, res, next) => {
 		let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
 		let values = [bookName, writer, content]
 		const connect = await pool.getConnection()
-		const [result] = connect.query(sql, values)
+		const [result] = await connect.query(sql, values)
+		connect.release()
+		res.redirect('/book')
+	}
+	catch(err) {
+		next(err)
+	}
+})
+
+router.get('/remove/:id', async (req, res, next) => {
+	try {
+		let sql = 'DELETE FROM books WHERE id='+req.params.id
+		const connect = await pool.getConnection()
+		const [result] = await connect.query(sql)
+		console.log(result)
 		connect.release()
 		res.redirect('/book')
 	}
