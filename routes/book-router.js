@@ -1,18 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const mysql = require('mysql2');
-const connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-	password: '000000',
-  database: 'booldook'
-});
+const { pool } = require('../modules/mysql-conn')
 
-router.get('/', (req, res, next) => {
+router.get('/', async (req, res, next) => {
 	let sql = 'SELECT * FROM books ORDER BY id DESC'
-	connection.query(sql, (err, result) => {
-		res.json(result);
-	})
+	const connect = await pool.getConnection()
+	const result = await connect.query(sql)
+	connect.release()
+	res.json(result[0])
 })
 
 router.get('/create', (req, res, next) => {

@@ -1,10 +1,13 @@
+require('dotenv').config();
 const express = require('express')
 const app = express()
 const path = require('path')
 const createError = require('http-errors')
 
 /************* Init ***************/
-app.listen(3000, () => { console.log('http://127.0.0.1:3000') })
+app.listen(process.env.PORT, () => { 
+	console.log(process.env.HOST+':'+process.env.PORT) 
+})
 app.set('view engine', 'pug')
 app.set('views', path.join(__dirname, './views'))
 app.locals.pretty = true
