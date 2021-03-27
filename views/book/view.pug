@@ -1,0 +1,21 @@
+extends ../layout/default
+block content
+	table.table.view-tb 
+		tbody 
+			tr 
+				td.title 제목
+				td.content= rs.bookName
+			tr 
+				td.title 저자
+				td.content= rs.writer
+			tr 
+				td.title 발행일
+				td.content= rs.createdAt
+			tr 
+				td(colspan="2").p-3= rs.content 
+	.my-5.text-center 
+		a.btn.btn-primary(href=`/book/list/${page}`) 리스트
+		span &nbsp;
+		a.btn.btn-info(href=`/book/update/${rs.id}`) 수정
+		span &nbsp;
+		a.btn.btn-danger(href=`javascript: delBook(${rs.id});`) 삭제

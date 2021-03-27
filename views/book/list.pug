@@ -1,6 +1,6 @@
 extends ../layout/default
 block content
-	table.table.table-hover 
+	table.table.table-hover.text-center 
 		thead 
 			tr 
 				th 번호
@@ -13,8 +13,9 @@ block content
 			each book in books
 				tr 
 					td= book.id
-					td= book.bookName
-					td= book.content
+					td(style="text-align: left")
+						a(href=`/book/view/${book.id}?page=${pager.page}`)= book.bookName
+					td(style="text-align: left")= book.content
 					td= book.writer
 					td= book.createdAt
 					td

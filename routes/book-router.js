@@ -52,9 +52,22 @@ router.get('/remove/:id', async (req, res, next) => {
 		let sql = 'DELETE FROM books WHERE id='+req.params.id
 		const connect = await pool.getConnection()
 		const [result] = await connect.query(sql)
-		console.log(result)
 		connect.release()
 		res.redirect('/book')
+	}
+	catch(err) {
+		next(err)
+	}
+})
+
+router.get('/view/:id', async (req, res, next) => {
+	try {
+		let sql, connect
+		sql = 'SELECT * FROM books WHERE id='+req.params.id
+		connect = await pool.getConnection()
+		const [[rs]] = await connect.query(sql)
+		rs.createdAt = moment(rs.createdAt).format('YYYY-MM-DD')
+		res.render('book/view', { ...pug, rs, page: req.query.page || 1 })
 	}
 	catch(err) {
 		next(err)

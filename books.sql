@@ -13,9 +13,11 @@
 
 -- Read
 -- SELECT * FROM books ORDER BY bookName ASC; -- ASC 
-SELECT * FROM books ORDER BY id DESC LIMIT 0, 5; --시작레코드, 갯수
-
-
+-- SELECT * FROM books ORDER BY id DESC LIMIT 0, 5; --시작레코드, 갯수
+-- SELECT COUNT(*) FROM books;
+-- SELECT * FROM books WHERE id=1;
+-- SELECT * FROM books WHERE bookName LIKE '%별주부%';
+SELECT * FROM books WHERE bookName LIKE '%별주부%' OR content LIKE '%별주부%';
 
 
 
