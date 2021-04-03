@@ -3,6 +3,7 @@ const moment = require('moment')
 const joi = require('../middlewares/joi-mw')
 const pager = require('../modules/pager-conn')
 const router = express.Router()
+const { alert } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 const { upload } = require('../modules/multer-conn')
 const pug = { title: '도서관리', file: 'book' }
@@ -36,20 +37,24 @@ router.get('/create', (req, res, next) => {
 router.post('/save', upload.single('upfile'), joi('bookSave'), async (req, res, next) => {
 	try {
 		if(req.banExt) {
-
+			res.send(alert(req.banExt + '는 업로드가 허용되지 않습니다.'))
 		}
 		else {
-
+			let { bookName, writer, content, sql='', values=[], connect=null } = req.body
+			sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
+			values = [bookName, writer, content]
+			connect = await pool.getConnection()
+			const [result] = await connect.query(sql, values)
+			connect.release()
+			if(req.file) {
+				connect = await pool.getConnection()
+				sql = 'INSERT INTO files SET bookid=?, oriname=?, savename=?'
+				values = [result.insertId, req.file.originalname, req.file.filename]
+				const [result2] = await connect.query(sql, values)
+				connect.release()
+			}
+			res.redirect('/book')
 		}
-		let { bookName, writer, content } = req.body
-		let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
-		let values = [bookName, writer, content]
-		const connect = await pool.getConnection()
-		const [result] = await connect.query(sql, values)
-
-
-		connect.release()
-		res.redirect('/book')
 	}
 	catch(err) {
 		next(err)
