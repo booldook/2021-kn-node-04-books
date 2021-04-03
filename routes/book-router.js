@@ -14,7 +14,9 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 		let page, connect, sql, values;
 		page = req.params.page || 1
 		sql = 'SELECT count(*) FROM books'
+		connect = await pool.getConnection()
 		const [[recordCount]] = await connect.query(sql)
+		connect.release()
 		const pageObj = pager(page, recordCount['count(*)'])
 		sql = 'SELECT * FROM books ORDER BY id DESC LIMIT ?, ?'
 		connect = await pool.getConnection()
