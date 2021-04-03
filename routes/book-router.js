@@ -125,4 +125,18 @@ router.post('/update', joi('bookUpdate'), async (req, res, next) => {
 	}
 })
 
+router.get('/download/:id', async (req, res, next) => {
+	try {
+		let sql, connect;
+		sql = 'SELECT * FROM files WHERE id='+req.params.id
+		connect = await pool.getConnection()
+		const [[rs]] = await connect.query(sql)
+		connect.release()
+		res.download(filePath(rs.savename).realPath, rs.oriname) // savename, oriname
+	}
+	catch(err) {
+		next(err)
+	}
+})
+
 module.exports = router
