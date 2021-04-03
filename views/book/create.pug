@@ -1,8 +1,12 @@
 extends ../layout/default
 block content 
-	form(action="/book/save", method="post")
+	form(action="/book/save", method="post" enctype="multipart/form-data")
 		table.table.create-tb 
 			tbody 
 				include ../inc/inputForm
+				tr
+					td 첨부파일
+					td 
+						input.form-control-file(type="file" name="upfile" placeholder="첨부파일")
 		.text-center.my-5
 			button.btn.btn-primary 저장

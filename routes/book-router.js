@@ -4,6 +4,7 @@ const joi = require('../middlewares/joi-mw')
 const pager = require('../modules/pager-conn')
 const router = express.Router()
 const { pool } = require('../modules/mysql-conn')
+const { upload } = require('../modules/multer-conn')
 const pug = { title: '도서관리', file: 'book' }
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
@@ -32,13 +33,21 @@ router.get('/create', (req, res, next) => {
 	res.render('book/create', pug)
 })
 
-router.post('/save', joi('bookSave'), async (req, res, next) => {
+router.post('/save', upload.single('upfile'), joi('bookSave'), async (req, res, next) => {
 	try {
+		if(req.banExt) {
+
+		}
+		else {
+
+		}
 		let { bookName, writer, content } = req.body
 		let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
 		let values = [bookName, writer, content]
 		const connect = await pool.getConnection()
 		const [result] = await connect.query(sql, values)
+
+
 		connect.release()
 		res.redirect('/book')
 	}

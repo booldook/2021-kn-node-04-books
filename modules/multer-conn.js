@@ -36,4 +36,4 @@ const limits = { fileSize: 102400000 }
 const storage = multer.diskStorage({ destination: destCb, filename: fileCb })
 const upload = multer({ storage, fileFilter, limits })
 
-module.exports = { upload }
+module.exports = { upload, allowExt, allowFileExt, allowImgExt }
