@@ -1,7 +1,14 @@
 const Joi = require('joi')
 
 const schemas = {
-	book: {
+	bookSave: {
+		bookName: Joi.string().max(255).required(),
+		writer: Joi.string().max(255).required(),
+		content: Joi.string(),
+	},
+	bookUpdate: {
+		id: Joi.string().required(),
+		page: Joi.string(),
 		bookName: Joi.string().max(255).required(),
 		writer: Joi.string().max(255).required(),
 		content: Joi.string(),

@@ -1,6 +1,9 @@
 extends ../layout/default
 block content 
 	form(action="/book/update", method="post")
+		if rs && rs.id
+			input(type="hidden" name="id" value=`${rs.id}`)
+		input(type="hidden" name="page" value=`${page || 1}`) 
 		table.table.create-tb 
 			tbody 
 				include ../inc/inputForm

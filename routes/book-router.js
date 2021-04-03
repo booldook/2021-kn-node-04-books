@@ -32,7 +32,7 @@ router.get('/create', (req, res, next) => {
 	res.render('book/create', pug)
 })
 
-router.post('/save', joi('book'), async (req, res, next) => {
+router.post('/save', joi('bookSave'), async (req, res, next) => {
 	try {
 		let { bookName, writer, content } = req.body
 		let sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
@@ -87,7 +87,7 @@ router.get('/chg/:id', async (req, res, next) => {
 	}
 })
 
-router.post('/update', async (req, res, next) => {
+router.post('/update', joi('bookUpdate'), async (req, res, next) => {
 	try {
 		let { bookName, writer, content, id, page, sql=null, values=[], connect=null } = req.body
 		sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=?'
@@ -95,7 +95,7 @@ router.post('/update', async (req, res, next) => {
 		connect = await pool.getConnection()
 		let [rs] = await connect.query(sql, values)
 		connect.release()
-		res.redirect('/book/list/'+page)
+		res.redirect('/book/list/'+(page || 1))
 	}
 	catch(err) {
 		console.log(err)

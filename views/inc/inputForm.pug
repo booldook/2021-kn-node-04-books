@@ -1,8 +1,6 @@
 tr 
 	td 도서명
 	td
-		input(type="hidden" name="page" value=`${page || 1}`) 
-		input(type="hidden" name="id" value=`${rs && rs.id ? rs.id : ''}`) 
 		input.form-control(type="text" value=`${rs && rs.bookName ? rs.bookName : ''}` name="bookName" placeholder="도서명")
 tr 
 	td 저자
