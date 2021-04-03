@@ -75,18 +75,32 @@ router.get('/view/:id', async (req, res, next) => {
 })
 
 router.get('/chg/:id', async (req, res, next) => {
-	let sql, connect
-	sql = 'SELECT * FROM books WHERE id='+req.params.id
-	connect = await pool.getConnection()
-	const [[rs]] = await connect.query(sql)
-	res.render('book/update', { ...pug, rs, page: req.query.page || 1 })
+	try {
+		let sql, connect
+		sql = 'SELECT * FROM books WHERE id='+req.params.id
+		connect = await pool.getConnection()
+		const [[rs]] = await connect.query(sql)
+		res.render('book/update', { ...pug, rs, page: req.query.page || 1 })
+	}
+	catch(err) {
+		next(err)
+	}
 })
 
 router.post('/update', async (req, res, next) => {
-	let { bookName, writer='', content, id, page, sql=null, connect=null } = req.body
-	res.json({
-		bookName, writer, content, id, page, sql, connect
-	})
+	try {
+		let { bookName, writer, content, id, page, sql=null, values=[], connect=null } = req.body
+		sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=?'
+		values = [bookName, writer, content, id]
+		connect = await pool.getConnection()
+		let [rs] = await connect.query(sql, values)
+		connect.release()
+		res.redirect('/book/list/'+page)
+	}
+	catch(err) {
+		console.log(err)
+		next(err)
+	}
 })
 
 module.exports = router
