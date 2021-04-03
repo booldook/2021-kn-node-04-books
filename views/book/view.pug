@@ -12,7 +12,15 @@ block content
 				td.title 발행일
 				td.content= rs.createdAt
 			tr 
-				td(colspan="2").p-3= rs.content 
+				td(colspan="2").p-3.bg-white
+					p= rs.content
+					if rs.src 
+						img(src=`${rs.src}` style="max-width: 100%;") 
+			if rs.savename
+				tr 
+					td.title 첨부파일
+					td.content
+						a(href=`/book/download/${rs.fid}`)= rs.oriname
 	.my-5.text-center 
 		a.btn.btn-primary(href=`/book/list/${page}`) 리스트
 		span &nbsp;

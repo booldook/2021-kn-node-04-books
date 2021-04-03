@@ -1,3 +1,5 @@
+const path = require('path')
+
 const alert = (str, loc) => {
 	return `
 		<script>
@@ -6,4 +8,10 @@ const alert = (str, loc) => {
 		</script>`
 }
 
-module.exports = { alert }
+const filePath = (file) => {
+	let refPath = `/uploads/${file.split('-')[0]}/${file}`
+	let realPath = path.join(__dirname, '../storages/', file.split('-')[0], file)
+	return { refPath, realPath }
+}
+
+module.exports = { alert, filePath }
