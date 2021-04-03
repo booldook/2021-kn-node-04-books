@@ -1,0 +1,12 @@
+extends ../layout/default.pug
+block content
+	form(action="/multer/save" method="post" enctype="multipart/form-data")
+		table.table 
+			tbody 
+				tr 
+					td 파일
+					td
+						input.form-control(type="file" name="upfile" placeholder="첨부파일") 
+				tr 
+					td.text-center(colspan="2")
+						button.btn.btn-primary 저장 
