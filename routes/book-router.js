@@ -53,7 +53,7 @@ router.get('/remove/:id', async (req, res, next) => {
 		const connect = await pool.getConnection()
 		const [result] = await connect.query(sql)
 		connect.release()
-		res.redirect('/book')
+		res.redirect('/book/list/'+(req.query.page || 1))
 	}
 	catch(err) {
 		next(err)
@@ -72,6 +72,21 @@ router.get('/view/:id', async (req, res, next) => {
 	catch(err) {
 		next(err)
 	}
+})
+
+router.get('/chg/:id', async (req, res, next) => {
+	let sql, connect
+	sql = 'SELECT * FROM books WHERE id='+req.params.id
+	connect = await pool.getConnection()
+	const [[rs]] = await connect.query(sql)
+	res.render('book/update', { ...pug, rs, page: req.query.page || 1 })
+})
+
+router.post('/update', async (req, res, next) => {
+	let { bookName, writer='', content, id, page, sql=null, connect=null } = req.body
+	res.json({
+		bookName, writer, content, id, page, sql, connect
+	})
 })
 
 module.exports = router

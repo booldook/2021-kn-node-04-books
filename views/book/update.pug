@@ -1,8 +1,8 @@
 extends ../layout/default
 block content 
-	form(action="/book/save", method="post")
+	form(action="/book/update", method="post")
 		table.table.create-tb 
 			tbody 
 				include ../inc/inputForm
 		.text-center.my-5
-			button.btn.btn-primary 저장
+			button.btn.btn-info 수정

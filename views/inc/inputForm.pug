@@ -1,0 +1,14 @@
+tr 
+	td 도서명
+	td
+		input(type="hidden" name="page" value=`${page || 1}`) 
+		input(type="hidden" name="id" value=`${rs && rs.id ? rs.id : ''}`) 
+		input.form-control(type="text" value=`${rs && rs.bookName ? rs.bookName : ''}` name="bookName" placeholder="도서명")
+tr 
+	td 저자
+	td 
+		input.form-control(type="text" name="writer" value=`${rs && rs.writer ? rs.writer : ''}` placeholder="저자")
+tr 
+	td 내용
+	td 
+		input.form-control(type="text" name="content" value=`${rs && rs.content ? rs.content : ''}` placeholder="도서내용")
