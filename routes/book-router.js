@@ -78,9 +78,12 @@ router.get('/remove/:id', async (req, res, next) => {
 router.get('/view/:id', async (req, res, next) => {
 	try {
 		let sql, connect
-		sql = 'SELECT books.*, files.id AS fid, files.oriname, files.savename FROM books LEFT JOIN files ON books.id = files.bookid WHERE books.id=?'
+		sql = `
+		SELECT books.*, files.id AS fid, files.oriname, files.savename FROM books LEFT JOIN files ON 
+		books.id = files.bookid 
+		WHERE books.id=${req.params.id}`
 		connect = await pool.getConnection()
-		const [[rs]] = await connect.query(sql, [req.params.id])
+		const [[rs]] = await connect.query(sql)
 		connect.release()
 		rs.createdAt = moment(rs.createdAt).format('YYYY-MM-DD')
 		if(rs.savename) {
@@ -98,7 +101,11 @@ router.get('/view/:id', async (req, res, next) => {
 router.get('/chg/:id', async (req, res, next) => {
 	try {
 		let sql, connect
-		sql = 'SELECT * FROM books WHERE id='+req.params.id
+		sql = `
+		SELECT books.*, files.id AS fid, files.oriname, files.savename FROM books
+		LEFT JOIN files 
+		ON books.id = files.bookid 
+		WHERE books.id=${req.params.id}`
 		connect = await pool.getConnection()
 		const [[rs]] = await connect.query(sql)
 		connect.release()
