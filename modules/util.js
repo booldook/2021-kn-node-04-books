@@ -1,4 +1,5 @@
 const path = require('path')
+const { allowImgExt } = require('../modules/multer-conn')
 
 const alert = (str, loc) => {
 	return `
@@ -14,4 +15,8 @@ const filePath = (file) => {
 	return { refPath, realPath }
 }
 
-module.exports = { alert, filePath }
+const isImg = (file) => {
+	return allowImgExt.includes(path.extname(file).substr(1).toLocaleLowerCase()) ? true : false
+}
+
+module.exports = { alert, filePath, isImg }

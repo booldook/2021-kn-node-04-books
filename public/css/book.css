@@ -6,3 +6,9 @@
 .create-tb td:first-child {width: 20%; min-width: 120px; background-color: #eee;}
 .view-tb tr:not(:last-child) td:first-child {width: 20%; min-width: 120px; 
 	background-color: #eee;}
+
+.file-wrap {padding: 0.5em 0;}
+.file-wrap .thumb-img {max-width: 60px; max-height: 60px;}
+.file-wrap span {display: inline-block;}
+.file-wrap span.file-name {padding: 0.25em; font-weight: bold;}
+.file-wrap span.file-remove {width: 20px; height: 20px; background-color: red; color: #fff; line-height: 18px; font-weight: bold; text-align: center; cursor: pointer;}

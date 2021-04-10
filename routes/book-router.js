@@ -4,7 +4,7 @@ const path = require('path')
 const joi = require('../middlewares/joi-mw')
 const pager = require('../modules/pager-conn')
 const router = express.Router()
-const { alert, filePath } = require('../modules/util')
+const { alert, filePath, isImg } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 const { upload, allowImgExt } = require('../modules/multer-conn')
 const pug = { title: '도서관리', file: 'book' }
@@ -88,10 +88,8 @@ router.get('/view/:id', async (req, res, next) => {
 		const [[rs]] = await connect.query(sql)
 		connect.release()
 		rs.createdAt = moment(rs.createdAt).format('YYYY-MM-DD')
-		if(rs.savename) {
-			if(allowImgExt.includes(path.extname(rs.savename).substr(1).toLocaleLowerCase())) {
-				rs.src = filePath(rs.savename).refPath
-			}
+		if(rs.savename && isImg(rs.savename)) {
+			rs.src = filePath(rs.savename).refPath
 		}
 		res.render('book/view', { ...pug, rs, page: req.query.page || 1 })
 	}
@@ -111,6 +109,9 @@ router.get('/chg/:id', async (req, res, next) => {
 		connect = await pool.getConnection()
 		const [[rs]] = await connect.query(sql)
 		connect.release()
+		if(rs.savename && isImg(rs.savename)) {
+			rs.src = filePath(rs.savename).refPath
+		}
 		res.render('book/update', { ...pug, rs, page: req.query.page || 1 })
 	}
 	catch(err) {
