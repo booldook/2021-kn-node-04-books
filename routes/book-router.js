@@ -67,9 +67,21 @@ router.post('/save', upload.single('upfile'), joi('bookSave'), async (req, res, 
 
 router.get('/remove/:id', async (req, res, next) => {
 	try {
-		let sql = 'DELETE FROM books WHERE id='+req.params.id
-		const connect = await pool.getConnection()
-		const [result] = await connect.query(sql)
+		let sql, connect
+		sql = 'SELECT * FROM files WHERE bookid='+req.params.id
+		connect = await pool.getConnection()
+		let [rs] = await connect.query(sql)
+		connect.release()
+		if(rs[0]) {
+			await fs.remove(filePath(rs[0].savename).realPath)
+			sql = 'DELETE FROM files WHERE bookid='+req.params.id
+			connect = await pool.getConnection()
+			await connect.query(sql)
+			connect.release()
+		}
+		sql = 'DELETE FROM books WHERE id='+req.params.id
+		connect = await pool.getConnection()
+		await connect.query(sql)
 		connect.release()
 		res.redirect('/book/list/'+(req.query.page || 1))
 	}
@@ -132,19 +144,18 @@ router.post('/update', upload.single('upfile'), joi('bookUpdate'), async (req, r
 			connect = await pool.getConnection()
 			let [rs] = await connect.query(sql, values)
 			connect.release()
-			console.log(req.file)
 			if(req.file) {
 				sql = 'SELECT * FROM files WHERE bookid='+id
 				connect = await pool.getConnection()
 				let [rs2] = await connect.query(sql)
 				if(rs2[0]) {
 					await fs.remove(filePath(rs2[0].savename).realPath)
-					sql = 'UPDATE files SET savename=?, oriname=? WHERE bookid='+id
+					sql = 'UPDATE files SET savename=?, oriname=? WHERE bookid=?'
 				}
 				else {
-					sql = 'INSERT INTO files SET savename=?, oriname=?'
+					sql = 'INSERT INTO files SET savename=?, oriname=?, bookid=?'
 				}
-				values = [req.file.filename, req.file.originalname]
+				values = [req.file.filename, req.file.originalname, id]
 				connect = await pool.getConnection()
 				await connect.query(sql, values)
 				connect.release()
