@@ -5,6 +5,7 @@ const path = require('path')
 const createError = require('http-errors')
 const logger = require('./middlewares/logger-mw')
 const session = require('./middlewares/session-mw')
+const local = require('./middlewares/local-mw')
 
 /************* Init ***************/
 app.listen(process.env.PORT, () => { 
@@ -21,7 +22,12 @@ app.use(logger('common'))
 app.use(express.json())	// post -> req.body
 app.use(express.urlencoded({ extended: false }))
 app.use(session())
+app.use(local())
 
+app.use((req, res, next) => {
+	console.log(req.session)
+	next()
+})
 
 /************* Router ***************/
 const bookRouter = require('./routes/book-router')

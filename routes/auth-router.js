@@ -50,15 +50,35 @@ router.get('/login', (req, res, next) => {
 
 router.post('/logon', async (req, res, next) => {
 	try {
-		// let sql, connect, values
-		// sql = ''
-		// connect = await pool.getConnection()
-		// const [rs] = await connect.query(sql, values)
-		// connect.release()
+		let sql, connect, values, compare
+		let { userid, userpw } = req.body
+		sql = 'SELECT * FROM users WHERE userid=?'
+		values = [userid]
+		connect = await pool.getConnection()
+		const [rs] = await connect.query(sql, values)
+		connect.release()
+		if(rs[0]) {
+			compare = await bcrypt.compare(userpw, rs[0].userpw)
+			if(compare) {
+				req.session.user = {
+					id: rs[0].id,
+					email: rs[0].email
+				}
+				res.redirect('/')
+			}
+			else res.send(alert('아이디와 패스워드가 올바르지 않습니다.'))
+		}
+		else res.send(alert('아이디와 패스워드가 올바르지 않습니다.'))
 	}
 	catch(err) {
 		next(err)
 	}
+})
+
+router.get('/logout', (req, res, next) => {
+	req.session.destroy()
+	req.app.locals.user = null
+	res.redirect('/')
 })
 
 router.get('/api/valid-userid', async (req, res, next) => {
