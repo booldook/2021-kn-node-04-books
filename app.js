@@ -23,10 +23,12 @@ app.use(express.urlencoded({ extended: false }))
 
 /************* Router ***************/
 const bookRouter = require('./routes/book-router')
+const authRouter = require('./routes/auth-router')
 const multerRouter = require('./routes/multer-router')
 app.use('/', express.static( path.join(__dirname, './public') ))
 app.use('/uploads', express.static( path.join(__dirname, './storages') ))
 app.use('/book', bookRouter)
+app.use('/auth', authRouter)
 app.use('/multer', multerRouter)
 
 
