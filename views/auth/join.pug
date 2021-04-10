@@ -1,6 +1,6 @@
 extends ../layout/default.pug
 block content 
-	form(method="post" name="joinForm" action="/auth/save")
+	form(method="post" name="joinForm" action="/auth/save" onsubmit="return onJoin(this)")
 		table.table.table-hover.text-center.join-tb 
 			tbody 
 				tr 
@@ -12,6 +12,10 @@ block content
 					td.title 패스워드
 					td.content
 						input.form-control(type="password" name="userpw" placeholder="패스워드")
+				tr 
+					td.title 패스워드 확인
+					td.content
+						input.form-control(type="password" name="userpwReview" placeholder="패스워드확인")
 				tr 
 					td.title 이메일
 					td.content

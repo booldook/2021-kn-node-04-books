@@ -7,8 +7,8 @@ const router = express.Router()
 const { alert, filePath, isImg } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 const { upload, allowImgExt } = require('../modules/multer-conn')
-const pug = { title: '도서관리', file: 'book' }
 const fs = require('fs-extra')
+const pug = { title: '도서관리', file: 'book' }
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	try {
