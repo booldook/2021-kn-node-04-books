@@ -16,6 +16,6 @@ block content
 									img.thumb-img(src=`${rs.src}`, alt=`${rs.oriname}`)
 								span.file-name= rs.oriname
 								span.file-remove(onclick=`fileRemove(${rs.id})`) x
-						input.form-control(type="text" name="upfile" placeholder="첨부파일")
+						input.form-control-file(type="file" name="upfile" placeholder="첨부파일")
 		.text-center.my-5
 			button.btn.btn-info 수정

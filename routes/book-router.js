@@ -8,6 +8,7 @@ const { alert, filePath, isImg } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 const { upload, allowImgExt } = require('../modules/multer-conn')
 const pug = { title: '도서관리', file: 'book' }
+const fs = require('fs-extra')
 
 router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	try {
@@ -143,6 +144,30 @@ router.get('/download/:id', async (req, res, next) => {
 		const [[rs]] = await connect.query(sql)
 		connect.release()
 		res.download(filePath(rs.savename).realPath, rs.oriname) // savename, oriname
+	}
+	catch(err) {
+		next(err)
+	}
+})
+
+router.get('/api/file-remove/:id', async (req, res, next) => {
+	try {
+		let sql, connect
+		sql = 'SELECT * FROM files WHERE bookid='+req.params.id
+		connect = await pool.getConnection()
+		let [rs] = await connect.query(sql)
+		connect.release()
+		if(rs[0]) {
+			await fs.remove(filePath(rs[0].savename).realPath)
+			sql = 'DELETE FROM files WHERE bookid='+req.params.id
+			connect = await pool.getConnection()
+			await connect.query(sql)
+			connect.release()
+			res.json({ code: 200 })
+		}
+		else {
+			res.json({ code: 404, error: '파일이 존재하지 않습니다' })
+		}
 	}
 	catch(err) {
 		next(err)
