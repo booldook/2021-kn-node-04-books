@@ -1,4 +1,7 @@
 
+
+
+
 var isValidUserid = false
 function validUserid() {
 	var userid = $('form[name="joinForm"]').find('input[name="userid"]').val().trim()

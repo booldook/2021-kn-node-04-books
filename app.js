@@ -15,6 +15,9 @@ app.locals.pretty = true
 app.locals.TITLE = '도서관리시스템'
 
 
+
+
+
 /************* Middleware ***************/
 app.use(logger('common'))
 app.use(express.json())	// post -> req.body
