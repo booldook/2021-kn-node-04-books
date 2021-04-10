@@ -120,15 +120,37 @@ router.get('/chg/:id', async (req, res, next) => {
 	}
 })
 
-router.post('/update', joi('bookUpdate'), async (req, res, next) => {
+router.post('/update', upload.single('upfile'), joi('bookUpdate'), async (req, res, next) => {
 	try {
-		let { bookName, writer, content, id, page, sql=null, values=[], connect=null } = req.body
-		sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=?'
-		values = [bookName, writer, content, id]
-		connect = await pool.getConnection()
-		let [rs] = await connect.query(sql, values)
-		connect.release()
-		res.redirect('/book/list/'+(page || 1))
+		if(req.banExt) {
+			res.send(alert(req.banExt + '는 업로드가 허용되지 않습니다.'))
+		}
+		else {
+			let { bookName, writer, content, id, page, sql=null, values=[], connect=null } = req.body
+			sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=?'
+			values = [bookName, writer, content, id]
+			connect = await pool.getConnection()
+			let [rs] = await connect.query(sql, values)
+			connect.release()
+			console.log(req.file)
+			if(req.file) {
+				sql = 'SELECT * FROM files WHERE bookid='+id
+				connect = await pool.getConnection()
+				let [rs2] = await connect.query(sql)
+				if(rs2[0]) {
+					await fs.remove(filePath(rs2[0].savename).realPath)
+					sql = 'UPDATE files SET savename=?, oriname=? WHERE bookid='+id
+				}
+				else {
+					sql = 'INSERT INTO files SET savename=?, oriname=?'
+				}
+				values = [req.file.filename, req.file.originalname]
+				connect = await pool.getConnection()
+				await connect.query(sql, values)
+				connect.release()
+			}
+			res.redirect('/book/list/'+(page || 1))
+		}
 	}
 	catch(err) {
 		console.log(err)

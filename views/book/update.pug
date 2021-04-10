@@ -1,6 +1,6 @@
 extends ../layout/default
 block content 
-	form(action="/book/update", method="post")
+	form(action="/book/update", method="post" enctype="multipart/form-data")
 		if rs && rs.id
 			input(type="hidden" name="id" value=`${rs.id}`)
 		input(type="hidden" name="page" value=`${page || 1}`) 
