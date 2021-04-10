@@ -24,11 +24,6 @@ app.use(express.urlencoded({ extended: false }))
 app.use(session())
 app.use(local())
 
-app.use((req, res, next) => {
-	console.log(req.session)
-	next()
-})
-
 /************* Router ***************/
 const bookRouter = require('./routes/book-router')
 const authRouter = require('./routes/auth-router')
