@@ -43,3 +43,17 @@ function onJoin(f) {
 	}
 	return true
 }
+
+function onLogon(f) {
+	if(f.userid.value.trim() === '') {
+		alert('아이디를 확인하세요.')
+		f.userid.focus()
+		return false
+	}
+	if(f.userpw.value.trim() === '') {
+		alert('패스워드를 확인하세요.')
+		f.userpw.focus()
+		return false
+	}
+	return true
+}

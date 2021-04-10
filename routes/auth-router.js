@@ -43,6 +43,24 @@ router.post('/save', async (req, res, next) => {
 	}
 })
 
+router.get('/login', (req, res, next) => {
+	pug.title = '회원 로그인'
+	res.render('auth/login', pug)
+})
+
+router.post('/logon', async (req, res, next) => {
+	try {
+		// let sql, connect, values
+		// sql = ''
+		// connect = await pool.getConnection()
+		// const [rs] = await connect.query(sql, values)
+		// connect.release()
+	}
+	catch(err) {
+		next(err)
+	}
+})
+
 router.get('/api/valid-userid', async (req, res, next) => {
 	try {
 		let sql, values, connect

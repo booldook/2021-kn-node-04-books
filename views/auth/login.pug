@@ -1,0 +1,17 @@
+extends ../layout/default.pug
+block content 
+	form(method="post" name="loginForm" action="/auth/logon" onsubmit="return onLogon(this)")
+		table.table.table-hover.text-center.join-tb 
+			tbody 
+				tr 
+					td.title 아이디
+					td.content
+						input.form-control(type="text" name="userid" placeholder="아이디")
+				tr 
+					td.title 패스워드
+					td.content
+						input.form-control(type="password" name="userpw" placeholder="패스워드")
+				tr
+					td(colspan="2" style="border: none;")
+						button.btn.btn-primary.mr-2 로그인
+						button.btn.btn-warning(type="button") 카카오로그인
