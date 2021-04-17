@@ -63,7 +63,9 @@ router.post('/logon', isGuest, async (req, res, next) => {
 			if(compare) {
 				req.session.user = {
 					id: rs[0].id,
-					email: rs[0].email
+					userid: rs[0].userid,
+					email: rs[0].email,
+					grade: rs[0].grade
 				}
 				res.redirect('/')
 			}
