@@ -3,6 +3,8 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const createError = require('http-errors')
+const passport = reqiure('passport')
+const passportModule = require('./passport')
 const logger = require('./middlewares/logger-mw')
 
 /************* Init ***************/
@@ -21,10 +23,18 @@ app.use(express.json())	// post -> req.body
 app.use(express.urlencoded({ extended: false }))
 
 
+/************* passport ***************/
+passportModule(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+
+
+
 /************* Router ***************/
 const bookRouter = require('./routes/book-router')
 const authRouter = require('./routes/auth-router')
-const multerRouter = require('./routes/multer-router')
+const multerRouter = require('./routes/multer-router');
+const { Passport } = require('passport');
 app.use('/', express.static( path.join(__dirname, './public') ))
 app.use('/uploads', express.static( path.join(__dirname, './storages') ))
 app.use('/book', bookRouter)
