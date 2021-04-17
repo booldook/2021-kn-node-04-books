@@ -7,6 +7,7 @@ const router = express.Router()
 const { alert, filePath, isImg } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 const { upload, allowImgExt } = require('../modules/multer-conn')
+const { isUser, isGuest } = require('../middlewares/auth-mw')
 const fs = require('fs-extra')
 const pug = { title: '도서관리', file: 'book' }
 
@@ -34,11 +35,11 @@ router.get(['/', '/list', '/list/:page'], async (req, res, next) => {
 	}
 })
 
-router.get('/create', (req, res, next) => {
+router.get('/create', isUser, (req, res, next) => {
 	res.render('book/create', pug)
 })
 
-router.post('/save', upload.single('upfile'), joi('bookSave'), async (req, res, next) => {
+router.post('/save', isUser, upload.single('upfile'), joi('bookSave'), async (req, res, next) => {
 	try {
 		if(req.banExt) {
 			res.send(alert(req.banExt + '는 업로드가 허용되지 않습니다.'))
@@ -65,7 +66,7 @@ router.post('/save', upload.single('upfile'), joi('bookSave'), async (req, res, 
 	}
 })
 
-router.get('/remove/:id', async (req, res, next) => {
+router.get('/remove/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, connect
 		sql = 'SELECT * FROM files WHERE bookid='+req.params.id
@@ -90,7 +91,7 @@ router.get('/remove/:id', async (req, res, next) => {
 	}
 })
 
-router.get('/view/:id', async (req, res, next) => {
+router.get('/view/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, connect
 		sql = `
@@ -111,7 +112,7 @@ router.get('/view/:id', async (req, res, next) => {
 	}
 })
 
-router.get('/chg/:id', async (req, res, next) => {
+router.get('/chg/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, connect
 		sql = `
@@ -132,7 +133,7 @@ router.get('/chg/:id', async (req, res, next) => {
 	}
 })
 
-router.post('/update', upload.single('upfile'), joi('bookUpdate'), async (req, res, next) => {
+router.post('/update', isUser, upload.single('upfile'), joi('bookUpdate'), async (req, res, next) => {
 	try {
 		if(req.banExt) {
 			res.send(alert(req.banExt + '는 업로드가 허용되지 않습니다.'))
@@ -169,7 +170,7 @@ router.post('/update', upload.single('upfile'), joi('bookUpdate'), async (req, r
 	}
 })
 
-router.get('/download/:id', async (req, res, next) => {
+router.get('/download/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, connect;
 		sql = 'SELECT * FROM files WHERE id='+req.params.id
@@ -183,7 +184,7 @@ router.get('/download/:id', async (req, res, next) => {
 	}
 })
 
-router.get('/api/file-remove/:id', async (req, res, next) => {
+router.get('/api/file-remove/:id', isUser, async (req, res, next) => {
 	try {
 		let sql, connect
 		sql = 'SELECT * FROM files WHERE bookid='+req.params.id
