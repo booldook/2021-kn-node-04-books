@@ -3,7 +3,7 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const createError = require('http-errors')
-const passport = reqiure('passport')
+const passport = require('passport')
 const passportModule = require('./passport')
 const logger = require('./middlewares/logger-mw')
 
