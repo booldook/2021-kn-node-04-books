@@ -23,7 +23,8 @@ block content
 						a(href=`/book/download/${rs.fid}`)= rs.oriname
 	.my-5.text-center 
 		a.btn.btn-primary(href=`/book/list/${page}`) 리스트
-		span &nbsp;
-		a.btn.btn-info(href=`/book/chg/${rs.id}?page=${page}`) 수정
-		span &nbsp;
-		a.btn.btn-danger(href=`javascript: delBook(${rs.id}, ${page});`) 삭제
+		if user && rs.uid == user.id
+			span &nbsp;
+			a.btn.btn-info(href=`/book/chg/${rs.id}?page=${page}`) 수정
+			span &nbsp;
+			a.btn.btn-danger(href=`javascript: delBook(${rs.id}, ${page});`) 삭제
