@@ -20,10 +20,14 @@
 -- SELECT * FROM books WHERE bookName LIKE '%별주부%' OR content LIKE '%별주부%';
 
 -- JOIN
-SELECT books.*, files.oriname, files.savename , files.id AS fid
-FROM books LEFT JOIN files 
-ON books.id = files.bookid 
-ORDER BY books.id DESC;
+-- SELECT books.*, files.oriname, files.savename , files.id AS fid
+-- FROM books LEFT JOIN files 
+-- ON books.id = files.bookid 
+-- ORDER BY books.id DESC;
+
+ALTER TABLE `books`
+	ADD CONSTRAINT `FK_books_users` FOREIGN KEY ('uid') REFERENCES `users` (`id`) ON UPDATE NO ACTION ON DELETE NO ACTION;
+	
 
 
 

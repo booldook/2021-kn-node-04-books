@@ -46,8 +46,8 @@ router.post('/save', isUser, upload.single('upfile'), joi('bookSave'), async (re
 		}
 		else {
 			let { bookName, writer, content, sql='', values=[], connect=null } = req.body
-			sql = 'INSERT INTO books SET bookName=?, writer=?, content=?'
-			values = [bookName, writer, content]
+			sql = 'INSERT INTO books SET bookName=?, writer=?, content=?, uid=?'
+			values = [bookName, writer, content, req.session.user.id]
 			connect = await pool.getConnection()
 			const [result] = await connect.query(sql, values)
 			connect.release()
@@ -68,7 +68,7 @@ router.post('/save', isUser, upload.single('upfile'), joi('bookSave'), async (re
 
 router.get('/remove/:id', isUser, async (req, res, next) => {
 	try {
-		let sql, connect
+		let sql, connect, values
 		sql = 'SELECT * FROM files WHERE bookid='+req.params.id
 		connect = await pool.getConnection()
 		let [rs] = await connect.query(sql)
@@ -80,7 +80,8 @@ router.get('/remove/:id', isUser, async (req, res, next) => {
 			await connect.query(sql)
 			connect.release()
 		}
-		sql = 'DELETE FROM books WHERE id='+req.params.id
+		sql = 'DELETE FROM books WHERE id=? AND uid=?'
+		values = [req.params.id, req.session.user.id]
 		connect = await pool.getConnection()
 		await connect.query(sql)
 		connect.release()
@@ -119,7 +120,7 @@ router.get('/chg/:id', isUser, async (req, res, next) => {
 		SELECT books.*, files.id AS fid, files.oriname, files.savename FROM books
 		LEFT JOIN files 
 		ON books.id = files.bookid 
-		WHERE books.id=${req.params.id}`
+		WHERE books.id=${req.params.id} AND books.uid=${req.session.user.id}`
 		connect = await pool.getConnection()
 		const [[rs]] = await connect.query(sql)
 		connect.release()
@@ -140,8 +141,8 @@ router.post('/update', isUser, upload.single('upfile'), joi('bookUpdate'), async
 		}
 		else {
 			let { bookName, writer, content, id, page, sql=null, values=[], connect=null } = req.body
-			sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=?'
-			values = [bookName, writer, content, id]
+			sql = 'UPDATE books SET bookName=?, writer=?, content=? WHERE id=? AND uid=?'
+			values = [bookName, writer, content, id, req.session.user.id]
 			connect = await pool.getConnection()
 			let [rs] = await connect.query(sql, values)
 			connect.release()
