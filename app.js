@@ -5,6 +5,8 @@ const path = require('path')
 const createError = require('http-errors')
 const passport = require('passport')
 const passportModule = require('./passport')
+const session = require('./middlewares/session-mw')
+const local = require('./middlewares/local-mw')
 const logger = require('./middlewares/logger-mw')
 
 /************* Init ***************/
@@ -21,7 +23,8 @@ app.locals.TITLE = '도서관리시스템'
 app.use(logger('common'))
 app.use(express.json())	// post -> req.body
 app.use(express.urlencoded({ extended: false }))
-
+app.use(session())
+app.use(local())
 
 /************* passport ***************/
 passportModule(passport)

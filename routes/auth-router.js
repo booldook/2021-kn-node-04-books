@@ -4,6 +4,7 @@ const moment = require('moment')
 const bcrypt = require('bcrypt')
 const path = require('path')
 const joi = require('../middlewares/joi-mw')
+const passport = require('passport')
 const { alert } = require('../modules/util')
 const { pool } = require('../modules/mysql-conn')
 
@@ -48,17 +49,19 @@ router.get('/login', (req, res, next) => {
 	res.render('auth/login', pug)
 })
 
-router.post('/logon', async (req, res, next) => {
-	try {
-		// let sql, connect, values
-		// sql = ''
-		// connect = await pool.getConnection()
-		// const [rs] = await connect.query(sql, values)
-		// connect.release()
+
+router.post('/logon',  async (req, res, next) => {
+	const done = (err, user, msg) => {
+		if(err) return next(err)
+		if(!user) return res.send(alert(msg, '/'))
+		else {
+			req.login(user, (err) => {
+				if(err) return next(err)
+				else return res.send(alert('로그인 되었습니다.', '/'))
+			})
+		}
 	}
-	catch(err) {
-		next(err)
-	}
+	passport.authenticate('local', done)(req, res, next)
 })
 
 router.get('/api/valid-userid', async (req, res, next) => {
