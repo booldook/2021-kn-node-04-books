@@ -83,10 +83,10 @@ router.get('/api/valid-userid', async (req, res, next) => {
 router.get('/kakao', passport.authenticate('kakao'))
 router.get(
 	'/kakao/cb', 
-	passport.authenticate('kakao', {failureRedirect: '/'}, 
+	passport.authenticate('kakao', {failureRedirect: '/'}), 
 	(req, res, next) => {
 		res.redirect('/')
-	})
+	}
 )
 
 module.exports = router
