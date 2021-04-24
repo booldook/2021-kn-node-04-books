@@ -24,12 +24,12 @@ app.use(logger('common'))
 app.use(express.json())	// post -> req.body
 app.use(express.urlencoded({ extended: false }))
 app.use(session())
-app.use(local())
 
 /************* passport ***************/
 passportModule(passport)
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(local())
 
 
 

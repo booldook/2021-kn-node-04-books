@@ -50,7 +50,7 @@ router.get('/login', (req, res, next) => {
 })
 
 
-router.post('/logon',  async (req, res, next) => {
+router.post('/logon', async (req, res, next) => {
 	const done = (err, user, msg) => {
 		if(err) return next(err)
 		if(!user) return res.send(alert(msg, '/'))
@@ -80,6 +80,13 @@ router.get('/api/valid-userid', async (req, res, next) => {
 	}
 })
 
-
+router.get('/kakao', passport.authenticate('kakao'))
+router.get(
+	'/kakao/cb', 
+	passport.authenticate('kakao', {failureRedirect: '/'}, 
+	(req, res, next) => {
+		res.redirect('/')
+	})
+)
 
 module.exports = router
