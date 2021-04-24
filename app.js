@@ -3,6 +3,10 @@ const express = require('express')
 const app = express()
 const path = require('path')
 const createError = require('http-errors')
+const passport = require('passport')
+const passportModule = require('./passport')
+const session = require('./middlewares/session-mw')
+const local = require('./middlewares/local-mw')
 const logger = require('./middlewares/logger-mw')
 
 /************* Init ***************/
@@ -19,12 +23,21 @@ app.locals.TITLE = '도서관리시스템'
 app.use(logger('common'))
 app.use(express.json())	// post -> req.body
 app.use(express.urlencoded({ extended: false }))
+app.use(session())
+
+/************* passport ***************/
+passportModule(passport)
+app.use(passport.initialize())
+app.use(passport.session())
+app.use(local())
+
 
 
 /************* Router ***************/
 const bookRouter = require('./routes/book-router')
 const authRouter = require('./routes/auth-router')
-const multerRouter = require('./routes/multer-router')
+const multerRouter = require('./routes/multer-router');
+const { Passport } = require('passport');
 app.use('/', express.static( path.join(__dirname, './public') ))
 app.use('/uploads', express.static( path.join(__dirname, './storages') ))
 app.use('/book', bookRouter)
